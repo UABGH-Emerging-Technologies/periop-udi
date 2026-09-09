@@ -33,10 +33,10 @@ from device_class_resolver import resolve_device_class
 
 DEVICE_SAFETY_SYSTEM = "https://periop-udi.local/fhir/CodeSystem/device-safety"
 
-FHIR_BASE_URL = os.environ.get("FHIR_BASE_URL", "http://localhost:8080/fhir")
-# Browser-reachable base for display links (the container talks to HAPI via the
-# internal "hapi" hostname, but the user's browser needs localhost).
-PUBLIC_FHIR_BASE_URL = os.environ.get("PUBLIC_FHIR_BASE_URL", "http://localhost:8080/fhir")
+FHIR_BASE_URL = os.environ.get("FHIR_BASE_URL", "https://launch.smarthealthit.org/v/r4/fhir")
+# Browser-reachable base for display links — defaults to the same public SMART
+# Health IT sandbox as FHIR_BASE_URL.
+PUBLIC_FHIR_BASE_URL = os.environ.get("PUBLIC_FHIR_BASE_URL", "https://launch.smarthealthit.org/v/r4/fhir")
 # CDS Hooks recall-surveillance service (Phase 5).
 CDS_HOOKS_URL = os.environ.get("CDS_HOOKS_URL")
 SCAN_LOG = Path(os.environ.get("SCAN_LOG_PATH", "eval/usage_logs/scans.csv"))

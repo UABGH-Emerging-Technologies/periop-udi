@@ -1,78 +1,7 @@
+# Public-beta composition: runs a single container (gudid-core) and uses the
+# public SMART Health IT sandbox (https://launch.smarthealthit.org/v/r4/fhir)
+# as its FHIR server. No local HAPI, no CDS Hooks, no Postgres.
 services:
-  # ---- FHIR foundation (Phase 1) ----
-  hapi-db:
-    image: postgres:16
-    container_name: periop-udi-hapi-db
-    environment:
-      - POSTGRES_DB=hapi
-      - POSTGRES_USER=hapi
-      - POSTGRES_PASSWORD=hapi
-    volumes:
-      - hapi-pgdata:/var/lib/postgresql/data
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U hapi -d hapi"]
-      interval: 5s
-      timeout: 5s
-      retries: 20
-    restart: unless-stopped
-
-  hapi:
-    image: hapiproject/hapi:latest
-    container_name: periop-udi-hapi
-    depends_on:
-      hapi-db:
-        condition: service_healthy
-    # Bound to 127.0.0.1, NOT 0.0.0.0. HAPI has no authentication of its own, so
-    # publishing it on a deployed host would expose unauthenticated read/write/
-    # delete over every patient record. The app reaches it as http://hapi:8080
-    # on the Docker network; this mapping exists only for local debugging.
-    # docker-compose.deploy.yml removes it entirely.
-    ports:
-      - "127.0.0.1:8080:8080"
-    environment:
-      - SPRING_CONFIG_LOCATION=file:///app/config/application.yaml
-      - CORS_ALLOWED_ORIGIN=${CORS_ALLOWED_ORIGIN:-http://localhost:8090}
-    volumes:
-      - ./infrastructure/hapi/application.yaml:/app/config/application.yaml:ro
-    # NOTE: the hapiproject/hapi image is distroless (no shell), so an in-container
-    # healthcheck can't run. The seeder waits for HAPI's metadata endpoint itself.
-    restart: unless-stopped
-
-  # ---- Synthea seeder (Phase 1, one-shot) ----
-  synthea-seed:
-    build: ./infrastructure/synthea
-    container_name: periop-udi-synthea-seed
-    depends_on:
-      hapi:
-        condition: service_started
-    environment:
-      - FHIR_BASE_URL=http://hapi:8080/fhir
-      - PUBLIC_FHIR_BASE_URL=http://localhost:8080/fhir
-      - CDS_HOOKS_URL=http://cds-hooks:5001
-      - PATIENT_COUNT=${PATIENT_COUNT:-50}
-    volumes:
-      - ./infrastructure/synthea:/synthea-work
-    profiles:
-      - seed
-
-  # ---- CDS Hooks recall-surveillance service (Phase 5) ----
-  cds-hooks:
-    build: ./services/cds-hooks
-    container_name: periop-udi-cds-hooks
-    depends_on:
-      hapi:
-        condition: service_started
-    # Localhost only — the app calls it as http://cds-hooks:5001 internally.
-    ports:
-      - "127.0.0.1:8091:5001"
-    environment:
-      - PORT=5001
-      - FHIR_BASE_URL=http://hapi:8080/fhir
-      - RECALLS_DB_PATH=/app/data/recalls.db
-    volumes:
-      - ./services/cds-hooks/data:/app/data
-    restart: unless-stopped
-
   # ---- GUDID core app (existing STA app; moved off 8080) ----
   # Built from the repo root so the image includes the fhir-bridge modules.
   gudid-core:
@@ -93,9 +22,8 @@ services:
       - HOST_IP=${HOST_IP}
       - PORT=8090
       - FLASK_ENV=${FLASK_ENV:-production}
-      - FHIR_BASE_URL=http://hapi:8080/fhir
-      - PUBLIC_FHIR_BASE_URL=${PUBLIC_FHIR_BASE_URL:-http://localhost:8080/fhir}
-      - CDS_HOOKS_URL=http://cds-hooks:5001
+      - FHIR_BASE_URL=${FHIR_BASE_URL:-https://launch.smarthealthit.org/v/r4/fhir}
+      - PUBLIC_FHIR_BASE_URL=${PUBLIC_FHIR_BASE_URL:-https://launch.smarthealthit.org/v/r4/fhir}
       # ---- Access gate ----
       - REQUIRE_AUTH=${REQUIRE_AUTH:-true}
       - DEMO_PASSCODE=${DEMO_PASSCODE}
@@ -127,9 +55,8 @@ services:
       - HOST_IP=${HOST_IP}
       - PORT=8090
       - FLASK_ENV=development
-      - FHIR_BASE_URL=http://hapi:8080/fhir
-      - PUBLIC_FHIR_BASE_URL=http://localhost:8080/fhir
-      - CDS_HOOKS_URL=http://cds-hooks:5001
+      - FHIR_BASE_URL=${FHIR_BASE_URL:-https://launch.smarthealthit.org/v/r4/fhir}
+      - PUBLIC_FHIR_BASE_URL=${PUBLIC_FHIR_BASE_URL:-https://launch.smarthealthit.org/v/r4/fhir}
       # ---- SMART App Launch v2 ----
       - APP_BASE_URL=${APP_BASE_URL:-http://localhost:8090}
       - SMART_CLIENT_ID=${SMART_CLIENT_ID:-periop-udi}
@@ -142,6 +69,3 @@ services:
     command: python app.py
     profiles:
       - dev
-
-volumes:
-  hapi-pgdata:

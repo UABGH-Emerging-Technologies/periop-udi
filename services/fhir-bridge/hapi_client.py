@@ -12,7 +12,7 @@ from typing import Any, Optional
 
 import requests
 
-DEFAULT_BASE_URL = os.environ.get("FHIR_BASE_URL", "http://localhost:8080/fhir")
+DEFAULT_BASE_URL = os.environ.get("FHIR_BASE_URL", "https://launch.smarthealthit.org/v/r4/fhir")
 _JSON = "application/fhir+json"
 
 

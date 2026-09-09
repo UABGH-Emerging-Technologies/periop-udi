@@ -3,11 +3,8 @@
 #   docker compose -f docker-compose.yml -f docker-compose.deploy.yml up -d --build
 #
 # What it changes versus the base file:
-#   * HAPI and CDS Hooks publish NO host ports at all. They are reachable only on
-#     the internal Docker network. HAPI has no authentication of its own, so the
-#     only safe posture is not to expose it.
-#   * The app is not published either — Caddy terminates TLS and proxies to it,
-#     so the only thing on the public internet is 80/443.
+#   * The gudid-core app is not published on a host port — Caddy terminates TLS
+#     and proxies to it, so the only thing on the public internet is 80/443.
 #   * Caddy obtains and renews a Let's Encrypt certificate automatically.
 #
 # Required in .env before running (see DEPLOYMENT.md):
@@ -20,12 +17,6 @@
 #   CORS_ALLOWED_ORIGIN  https://${PUBLIC_HOSTNAME}
 
 services:
-  hapi:
-    ports: !override []
-
-  cds-hooks:
-    ports: !override []
-
   gudid-core:
     ports: !override []
     environment:
