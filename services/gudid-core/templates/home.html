@@ -238,15 +238,32 @@
           recall surveillance — in about a second.
         </p>
 
+        {% if smart %}
         <div class="flex flex-wrap items-center gap-3">
           <a href="/scan-to-chart" class="btn btn-primary">
-            Document a device
+            Scan a device into {{ smart.patient_name }}'s chart
             <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
           </a>
-          <a href="/patients" class="btn btn-secondary">
-            Open a patient chart
+          {% if smart.patient %}
+          <a href="{{ '/patient/' ~ smart.patient ~ '/timeline' }}" class="btn btn-secondary">
+            Open the chart
+          </a>
+          {% endif %}
+        </div>
+        {% else %}
+        <div class="flex flex-wrap items-center gap-3">
+          <a href="/launch/standalone" class="btn btn-primary">
+            Launch from SMART sandbox
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a href="/scan-to-chart" class="btn btn-secondary">
+            Document a device
           </a>
         </div>
+        <p class="text-[13px] mt-3" style="color: var(--ink-3);">
+          Opens the public SMART Health IT sandbox — pick any patient, then scan a device into their chart.
+        </p>
+        {% endif %}
 
         <div class="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 text-[12px]" style="color: var(--ink-3);">
           <span class="flex items-center gap-1.5">
