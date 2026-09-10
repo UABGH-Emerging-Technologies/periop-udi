@@ -335,4 +335,4 @@ docker-compose up
 
 ## License
 
-Apache-2.0. See [`LICENSE`](LICENSE). Citation metadata in [`CITATION.cff`](CITATION.cff).
+GPL-3.0. See [`LICENSE`](LICENSE). Citation metadata in [`CITATION.cff`](CITATION.cff).

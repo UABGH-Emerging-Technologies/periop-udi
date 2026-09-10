@@ -327,7 +327,7 @@
 
 **Project Lead:** Prashant Sharma (psharma2@uab.edu)  
 **Affiliation:** University of Alabama at Birmingham, Department of Anesthesiology  
-**License:** Apache 2.0  
+**License:** GPL-3.0  
 **Citation:** See `CITATION.cff`
 
 ---
