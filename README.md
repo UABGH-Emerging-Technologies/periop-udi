@@ -23,6 +23,16 @@ Developed in the Department of Anesthesiology, University of Alabama at Birmingh
 
 **Documentation:** [Architecture](architecture.md) · [Code flow](docs/code-flow.md) ·
 [Development progress](docs/progress.md)
+<img width="2434" height="2864" alt="image" src="https://github.com/user-attachments/assets/63dd28d2-8a55-492f-8f08-4937cd4dd10c" />
+<img width="2434" height="891" alt="image" src="https://github.com/user-attachments/assets/0f192c3e-3c00-4744-b3ff-779c92ba63c1" />
+<img width="1486" height="934" alt="image" src="https://github.com/user-attachments/assets/cb89c06e-c633-47c0-bc11-19cbe3bc2b20" />
+<img width="2528" height="925" alt="image" src="https://github.com/user-attachments/assets/777a81c8-395f-433f-a7c0-dd2ba1ab0312" />
+<img width="2460" height="846" alt="image" src="https://github.com/user-attachments/assets/1deff981-edb7-4bbf-86b1-f8ce9177c3dd" />
+<img width="2218" height="852" alt="image" src="https://github.com/user-attachments/assets/702ff6aa-a26f-46a5-950b-cb214f3c8e09" />
+<img width="2434" height="1098" alt="image" src="https://github.com/user-attachments/assets/5146a5ec-5088-4a7b-825d-074622426081" />
+
+
+
 
 ---
 
